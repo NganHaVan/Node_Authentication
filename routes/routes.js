@@ -10,6 +10,7 @@ module.exports=function(app,passport){
 
     app.post('/signup',(req,res)=>{
         var newUser=new User({
+            username:req.body.username,
             email:req.body.email,
             password:req.body.password
         });

@@ -3,6 +3,10 @@ var config=require('../config/database');
 var bcrypt=require('bcryptjs');
 
 var userSchema=mongoose.Schema({
+    username:{
+        type:String,
+        require:true
+    },
     email:{
         type:String,
         require:true,
