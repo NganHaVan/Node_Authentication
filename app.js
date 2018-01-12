@@ -6,7 +6,6 @@ const mongoose= require('mongoose');
 const cors=require('cors');
 const passport=require('passport');
 const config=require('./config/database');
-
 const port=process.env.PORT || 8000;
 const app=express();
 
@@ -15,7 +14,7 @@ mongoose.connect(config.db);
 mongoose.Promise=global.Promise;
 require('./config/passport')(passport);
 
-app.use(express.static(__dirname+'client'));
+app.use(express.static(__dirname+'client/myclient'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));

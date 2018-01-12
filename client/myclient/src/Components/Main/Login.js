@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import {Grid,Button,Form,Header,Message,Segment,Checkbox} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
-import _ from 'lodash';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import InlineError from '../messages/InlineError';
+import {login} from '../../Redux/actions/login';
 
-export default class Login extends Component {
+class Login extends Component {
     state={
         data:{
             email:'',
-            pass:''
+            password:''
         },
         loading:false,
         error:{}
@@ -19,22 +21,42 @@ export default class Login extends Component {
         this.setState({data:{...this.state.data,[name]:value}});
         // console.log(this.state.data);
     }
-    handleSubmit=()=>{
+    handleSubmit=(event)=>{
+        event.preventDefault();
+        // console.log(this.state.data);
         const error=this.validate(this.state.data);
-        this.setState({error:error});
-        (_.isEmpty(this.state.error))
+        this.setState({
+               error,
+               loading:true
+            });
+        /* (_.isEmpty(this.state.error))
         ?(
-        console.log(this.state.data)
+        this.props.history.push('/')
         )
-        :(console.log('Cannot submit'));
+        :(console.log('Cannot submit')); */
+        if (Object.keys(error).length===0) {
+            this.props.login(this.state.data)
+            .then(()=>{
+                console.log('Hello');
+                this.props.history.push('/profile');
+            })
+            .catch(err=>{
+                console.log(err.response.data);
+                this.setState({
+                    error:{
+                        global:err.response.data.message
+                    }
+                })
+            })
+        }
     }
     validate=(data)=>{
         const err={};
         if (!validator.isEmail(data.email)) {
             err.email='Invalid email'
         }
-        if (!data.pass) {
-            err.pass='Your password is missing'
+        if (!data.password) {
+            err.password='Your password is missing'
         }
         return err;
     }
@@ -47,21 +69,35 @@ export default class Login extends Component {
                 <Form>
                 <Segment raised textAlign='left'>
                 <Header as='h2' color='blue' textAlign='center'>Please fill in login form</Header>
+                {(error.global)?(
+                    <Message negative>
+                        <Message.Header>Something went wrong</Message.Header>
+                        <p>{error.global}</p>
+                    </Message>
+                ):('')}
                 <Form.Input fluid icon='mail' iconPosition='left' type='email' placeholder='Email' name='email' id='email' value={this.state.data.email} onChange={this.handleChange} required error={!!error.email}/>
                 {(error.email)?(<InlineError text={error.email}/>):('')}
 
-                <Form.Input fluid icon='privacy' iconPosition='left' type='password' placeholder='Password' name='pass' id='pass' value={this.state.data.pass} onChange={this.handleChange} required error={!!error.pass}/>
-                {(error.pass)?(<InlineError text={error.pass}/>):('')}
+                <Form.Input fluid icon='privacy' iconPosition='left' type='password' placeholder='Password' name='password' id='password' value={this.state.data.password} onChange={this.handleChange} required error={!!error.password}/>
+                {(error.password)?(<InlineError text={error.password}/>):('')}
                 <br/>
                 <Checkbox label='Remember me'/>
                 <br/>
                 <Button color='blue' fluid size='medium' type='submit' onClick={this.handleSubmit}>Login</Button>
                 </Segment>
                 </Form>
-                <Message attached='bottom' warning floating>New to us? <Link to='/signup'><a>Signup</a></Link></Message>
+                <Message attached='bottom' warning floating>New to us? <Link to='/signup'>Signup</Link></Message>
                 </Grid.Column>
                 </Grid>
             </div>
         )
     }
 }
+
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+        login
+    },dispatch)
+}
+
+export default connect(null,mapDispatchToProps)(Login);

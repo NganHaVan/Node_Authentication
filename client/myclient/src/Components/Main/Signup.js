@@ -18,7 +18,7 @@ export default class Signup extends Component {
                 <Button style={{marginTop:8}} color='blue' fluid size='medium' onClick={this.handleSubmit}>Signup</Button>
                 </Segment>
                 </Form>
-                <Message attached='bottom' warning floating>Already had an account. Please <Link to='/login'><a>Login</a></Link></Message>
+                <Message attached='bottom' warning floating>Already had an account. Please <Link to='/login'>Login</Link></Message>
                 </Grid.Column>
                 </Grid>
             </div>

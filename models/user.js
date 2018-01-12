@@ -39,6 +39,7 @@ module.exports.createUser=function(newUser,cb){
     });
 };
 module.exports.comparePass=function(myPass,hashPass,cb){
+    console.log(arguments);
     bcrypt.compare(myPass,hashPass,function(err,isMatch){
         if (err) {
             throw err;
