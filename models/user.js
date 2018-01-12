@@ -10,7 +10,8 @@ var userSchema=mongoose.Schema({
     email:{
         type:String,
         require:true,
-        unique:true
+        unique:true,
+        index:true
     },
     password:{
         type:String,

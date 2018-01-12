@@ -6,7 +6,8 @@ export function login(user)  {
         return axios.post('/api/auth/login',user)
         .then((res)=>{
             dispatch({type:'USER_LOGGED_IN',payload:res.data});
-            console.log(res);
+            localStorage.userToken=res.data.token;
+            // console.log(res.data);
         })
     }
 };

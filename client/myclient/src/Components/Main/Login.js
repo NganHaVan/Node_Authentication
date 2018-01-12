@@ -37,8 +37,16 @@ class Login extends Component {
         if (Object.keys(error).length===0) {
             this.props.login(this.state.data)
             .then(()=>{
-                console.log('Hello');
-                this.props.history.push('/profile');
+                if (this.props.users.success) {
+                    this.props.history.push('/profile');
+                } else{
+                    this.setState({
+                        error:{
+                            global:this.props.users.message
+                        }
+                    })
+                }
+                // console.log(this.props.users);
             })
             .catch(err=>{
                 console.log(err.response.data);
@@ -99,5 +107,10 @@ function mapDispatchToProps(dispatch){
         login
     },dispatch)
 }
+function mapStateToProps(state){
+    return {
+        users:state.user
+    }
+}
 
-export default connect(null,mapDispatchToProps)(Login);
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
