@@ -1,11 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
-export default class Profile extends Component {
+import ConfirmMessage from '../messages/ConfirmMessage';
+
+class Profile extends Component {
     render() {
         return (
             <div>
-                <h1>Profile</h1>
+            {(!this.props.isConfirmed)?(<ConfirmMessage/>):(<h1>Profile</h1>)}
             </div>
         )
     }
 }
+function mapStateToProps(state){
+    return {
+        isConfirmed:!!state.user.confirmed
+    }
+}
+export default connect(mapStateToProps)(Profile);
