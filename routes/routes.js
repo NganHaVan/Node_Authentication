@@ -53,12 +53,7 @@ module.exports=function(app,passport){
                             var token=jwt.sign(user.toJSON(),config.secret,{expiresIn:'10m'});
                             res.json({
                                 success:true,
-                                token:'Bearer '+token,
-                                user:{
-                                    id:user._id,
-                                    email:user.email,
-                                    password:user.password
-                                }
+                                token:'Bearer '+token
                             });
                         } else {
                             return res.json({

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { Menu,Icon } from 'semantic-ui-react'
+import { Menu,Icon,Button } from 'semantic-ui-react'
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
+import {logout} from '../../Redux/actions/login';
 
 class Header extends Component {
   state = {}
@@ -16,12 +19,15 @@ class Header extends Component {
         <Menu.Item as={Link} to='/' name='web' active={activeItem === 'web'} onClick={this.handleItemClick}>
           Website
         </Menu.Item>
+        {(this.props.isAuthenticated)?(
+          <Menu.Item as={Link} to='/profile' name='profile' active={activeItem==='profile'} onClick={this.handleItemClick}>Profile</Menu.Item>
+        ):('')}
 
 
         {(this.props.isAuthenticated)?(
           <Menu.Menu position='right'>
-            <Menu.Item>Welcome &nbsp<b>User</b></Menu.Item>
-            <Menu.Item>
+            <Menu.Item>Welcome,&nbsp;<b>User</b></Menu.Item>
+            <Menu.Item as={Button} onClick={this.props.logout}>
             <Icon name='log out'/>
             Logout
             </Menu.Item>
@@ -44,6 +50,13 @@ class Header extends Component {
     )
   }
 }
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    logout
+  },dispatch)
+}
+
 function mapStateToProps(state){
   return {
     // Check if token is defined
@@ -51,4 +64,4 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps,mapDispatchToProps)(Header);
