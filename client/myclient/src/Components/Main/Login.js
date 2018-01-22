@@ -49,7 +49,7 @@ class Login extends Component {
                 // console.log(this.props.users);
             })
             .catch(err=>{
-                console.log(err.response.data);
+                // console.log(err.response.data);
                 this.setState({
                     error:{
                         global:err.response.data.message

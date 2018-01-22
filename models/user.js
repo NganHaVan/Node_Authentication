@@ -16,6 +16,14 @@ var userSchema=mongoose.Schema({
     password:{
         type:String,
         require:true
+    },
+    isConfirmed:{
+        type:Boolean,
+        default:false
+    },
+    tokenConfirmation:{
+        type:String,
+        default:''
     }
 });
 

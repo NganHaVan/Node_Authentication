@@ -19,6 +19,7 @@ class Header extends Component {
         <Menu.Item as={Link} to='/' name='web' active={activeItem === 'web'} onClick={this.handleItemClick}>
           Website
         </Menu.Item>
+
         {(this.props.isAuthenticated)?(
           <Menu.Item as={Link} to='/profile' name='profile' active={activeItem==='profile'} onClick={this.handleItemClick}>Profile</Menu.Item>
         ):('')}
@@ -61,6 +62,7 @@ function mapStateToProps(state){
   return {
     // Check if token is defined
     isAuthenticated:!!state.user.token
+    // getUser:state.user.user
   }
 }
 

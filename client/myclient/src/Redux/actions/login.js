@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export function userLoggedIn(user){
+    // console.log(user);
     return {
         type:'USER_LOGGED_IN',
         payload:user
@@ -36,8 +37,9 @@ export function userSignUp(user){
     return (dispatch)=>{
         return axios.post('/api/auth/signup',user)
         .then((res)=>{
-            dispatch({type:'USER_SIGNUP',payload:res.data});
-            console.log(res.data);
+            dispatch(userLoggedIn(res.data));
+            // console.log(res.data)
+            localStorage.userToken=res.data.token;
         })
         .catch(err=>{throw err});
     }
@@ -54,7 +56,7 @@ export function userProfile(token){
             }
         })
         .then((res)=>{
-            console.log(res.data);
+            // console.log(res.data);
             dispatch({type:'USER_PROFILE',payload:res.data});
         })
     }

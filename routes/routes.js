@@ -14,16 +14,35 @@ module.exports=function(app,passport){
             email:req.body.email,
             password:req.body.password
         });
-        User.createUser(newUser,function(err,user){
+
+        User.getUserByEmail(newUser.email,function(err,user){
+            // console.log(arguments);
             if (err) {
                 res.json({
                     success:false,
-                    message:'Error in registration'
-                });
-            } else{
+                    message:err
+                })
+            } else if(user){
                 res.json({
-                    success:true,
-                    message:'Register successfully'
+                    success:false,
+                    message:'Email is already exist. Please log in'
+                })
+            } else{
+                User.createUser(newUser,function(err,user){
+                    if (err) {
+                        res.json({
+                            success:false,
+                            message:'Error in registration'
+                        });
+                    } else{
+                        var token=jwt.sign(user.toJSON(),config.secret,{expiresIn:'10m'});
+                        user.tokenConfirmation=token;
+                        res.json({
+                            success:true,
+                            message:'Register successfully',
+                            token:'Bearer '+token
+                        })
+                    }
                 })
             }
         })
@@ -31,7 +50,8 @@ module.exports=function(app,passport){
     app.post('/api/auth/login',(req,res)=>{
             var email=req.body.email;
             var password=req.body.password;
-            User.getUserByEmail(email,function(err,user){   
+            User.getUserByEmail(email,function(err,user){
+                console.log(arguments);   
                 if (err) {
                     throw err;
                 }
@@ -44,8 +64,8 @@ module.exports=function(app,passport){
                 else{
 
                     User.comparePass(password,user.password,function(err,isMatch){
-                        console.log('===compare pass=====');
-                        console.log(arguments);
+                        // console.log('===compare pass=====');
+                        // console.log(arguments);
                         if (err) {
                             throw err;
                         }
