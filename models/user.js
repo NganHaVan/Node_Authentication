@@ -26,6 +26,9 @@ var userSchema=mongoose.Schema({
         default:''
     }
 });
+userSchema.methods.generateConfirmationURL=function generateConfirmationURL(){
+    return `${process.env.HOST}/confirmation/${this.tokenConfirmation}`
+}
 
 var User=module.exports=mongoose.model('User',userSchema);
 

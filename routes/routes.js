@@ -2,6 +2,7 @@ var jwt=require('jsonwebtoken');
 var passport=require('passport');
 var User=require('../models/user');
 var config=require('../config/database');
+var sendConfirmationEmail=require('../mailer');
 
 module.exports=function(app,passport){
     app.get('/',(req,res)=>{
@@ -36,12 +37,23 @@ module.exports=function(app,passport){
                         });
                     } else{
                         var token=jwt.sign(user.toJSON(),config.secret,{expiresIn:'10m'});
-                        user.tokenConfirmation=token;
-                        res.json({
+                        newUser.tokenConfirmation='Bearer '+token;
+                        newUser.save()
+                        .then(()=>{
+                            sendConfirmationEmail(newUser);
+                            res.json({
                             success:true,
                             message:'Register successfully',
                             token:'Bearer '+token
                         })
+                        
+                    })
+                    .catch(err=>{res.status(400).json({
+                        success:false,
+                        message:err+''
+                    })
+                });
+                        // console.log(newUser);
                     }
                 })
             }

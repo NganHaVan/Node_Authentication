@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export function userLoggedIn(user){
-    // console.log(user);
     return {
         type:'USER_LOGGED_IN',
         payload:user

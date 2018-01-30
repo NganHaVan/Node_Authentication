@@ -37,8 +37,9 @@ class Signup extends Component {
         // console.log(this.state);
         if (Object.keys(error).length===0) {
             this.props.userSignUp(this.state.data)
-            .then(()=>{
+            .then((result)=>{
                 // we are connecting signup API
+                console.log(result);
                 if (!this.props.users.success) {
                     this.setState({
                         error:{
